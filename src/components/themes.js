@@ -1,0 +1,51 @@
+export const themes = {
+  classic: {
+    "--background-color": "#eeebe2",
+    "--main-color": "#080909",
+    "--secondary-color": "#99947f",
+    "--alt-color": "#d3cfc1",
+    "--text-color": "#080909",
+  },
+  light: {
+    "--background-color": "#FFF",
+    "--main-color": "#2d2076",
+    "--secondary-color": "#385eca",
+    "--alt-color": "#c8cedf",
+    "--text-color": "#2d2076",
+  },
+  ryujinscales: {
+    "--background-color": "#081426",
+    "--main-color": "#f17754",
+    "--secondary-color": "#ffbc90",
+    "--alt-color": "#040e1d",
+    "--text-color": "#ffe4bc",
+  },
+  husqy: {
+    "--background-color": "#000",
+    "--main-color": "#c58aff",
+    "--secondary-color": "#972fff",
+    "--alt-color": "#1e001e",
+    "--text-color": "#ebd7ff",
+  },
+  matrix: {
+    "--background-color": "#000",
+    "--main-color": "#15ff00",
+    "--secondary-color": "#006500",
+    "--alt-color": "#032000",
+    "--text-color": "#d1ffcd",
+  },
+  littledragon: {
+    "--background-color": "#ebe1ef",
+    "--main-color": "#8a5bd6",
+    "--secondary-color": "#a28db8",
+    "--alt-color": "#dac7e2",
+    "--text-color": "#212b43",
+  },
+  muted: {
+    "--background-color": "#525252",
+    "--main-color": "#c5b4e3",
+    "--secondary-color": "#939eae",
+    "--alt-color": "#494949",
+    "--text-color": "#b1e4e3",
+  },
+};
