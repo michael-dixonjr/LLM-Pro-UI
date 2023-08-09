@@ -6,6 +6,7 @@ require("dotenv").config();
 const app = express();
 app.use(express.json()); // for parsing application/json
 app.use(cors());
+const fetch = require('node-fetch');
 
 
 const API_KEY = process.env.API_KEY;
