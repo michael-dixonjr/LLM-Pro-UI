@@ -73,4 +73,10 @@ app.post("/text-to-speech", async (req, res) => {
   }
 });
 
+app.get('/', async (req, res) => {
+  res.status(200).send({
+      message: 'Hey its working',
+  })
+});
+
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
