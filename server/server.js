@@ -6,7 +6,13 @@ require("dotenv").config();
 const app = express();
 app.use(express.json()); // for parsing application/json
 app.use(cors());
-const fetch = require('node-fetch');
+
+
+let fetch;
+import('node-fetch').then(module => {
+  fetch = module.default;
+});
+
 
 
 const API_KEY = process.env.API_KEY;
