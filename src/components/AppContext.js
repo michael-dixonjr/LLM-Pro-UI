@@ -103,7 +103,7 @@ export const AppProvider = (props) => {
     };
     try {
       const response = await fetch(
-        "https://llm-pro-ui-server.onrender.com",
+        "https://llm-pro-ui-server.onrender.com/completions",
         options
       );
       const data = await response.json();
@@ -371,7 +371,7 @@ const ccGetMessages = async (systemPromptForThisCall = systemPrompt) => {
     };
     try {
       const response = await fetch(
-        "https://llm-pro-ui-server.onrender.com",
+        "https://llm-pro-ui-server.onrender.com/completions",
         options
       );
       const data = await response.json();
