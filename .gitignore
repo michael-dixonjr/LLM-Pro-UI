@@ -3,6 +3,8 @@
 .env
 node_modules
 googlettsAPIkey.json
+googlettsAPIkey2.json
+
 
 # dependencies
 /node_modules

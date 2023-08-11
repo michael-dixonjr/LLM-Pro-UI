@@ -25,7 +25,7 @@ body {
 
 .side-bar {
   background-color: var(--background-color);
-  height: 100vh;
+  min-height: 100vh; /* change height to min-height */
   width: 244px;
   display: flex;
   flex-direction: column;
@@ -33,6 +33,9 @@ body {
   color: var(--text-color);
   text-align: center;
   border-right: 1px solid var(--main-color);
+  z-index: 999;
+  position: relative;
+  overflow-y: auto; /* add this line */
 }
 
 button {
@@ -181,6 +184,7 @@ dialog {
 .main {
   height: 100vh;
   width: 100%;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -211,10 +215,14 @@ h1, h2, li, ul, ol {
 
 .input-container {
   position: relative;
-  width: 100%;
+  width: 60vw;
   max-width: 650px;
   margin-bottom: 16px;
   color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .input-container:nth-child(2) {
@@ -244,7 +252,8 @@ label {
 }
 
 textarea {
-  width: 100%;
+  width: 60vw;
+  max-width: 650px;
   border: none;
   font-size: 20px;
   background-color: var(--alt-color);
@@ -292,7 +301,7 @@ textarea::-webkit-scrollbar {
 .feed {
   overflow-y: scroll;
   overflow-x: auto;
-  width: 85vw;
+  width: 60vw;
   padding: 0;
   color: var(--text-color);
 }
@@ -458,3 +467,27 @@ textarea::-webkit-scrollbar {
   }
 }
 
+
+/* mobile settings */
+
+@media (max-width: 1030px) {
+  .input-container {
+    width: 90vw;
+  }
+
+  textarea {
+    width: 90vw;
+  }
+
+  .feed {
+    width: 90vw;
+  }
+
+  .info {
+    display: none;
+  }
+
+  .header {
+    margin: 5px;
+  }
+}

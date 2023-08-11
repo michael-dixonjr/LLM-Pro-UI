@@ -107,7 +107,7 @@ const InputSection = () => {
         </button>
       </div>
 
-      <p className="info">Beta v.1 (desktop only)</p>
+      <p className="info">Beta v.1</p>
     </div>
   );
 };

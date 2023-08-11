@@ -228,7 +228,7 @@ const Sidebar = () => {
       </dialog>
 
       <nav className={isSidebarCollapsed ? "hidden" : ""}>
-        <p>Beta v.1 (desktop only)</p>
+        <p>Beta v.1</p>
       </nav>
     </section>
   );
