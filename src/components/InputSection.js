@@ -100,7 +100,7 @@ const InputSection = () => {
           ref={userPromptRef}
         />
         <p>Token Estimate: {userPromptCharCount}</p>
-        <button id="submit" onClick={getMessages}>
+        <button id="submit" onClick={() => getMessages()}>
           SEND➢
         </button>
       </div>
