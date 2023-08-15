@@ -11,9 +11,7 @@ const Sidebar = () => {
     message,
     setMessage,
     getMessages,
-    ccGetMessages,
     handleKeyDown,
-    ccHandleKeyDown,
     parseMessage,
     components,
     ReactMarkdown,
@@ -56,7 +54,7 @@ const Sidebar = () => {
     mapRoleToDisplay,
     useEffect,
     ccInputSection,
-    createNewChat,
+    handleClearChat,
     handleccButtonClick,
     handleStandardButtonClick,
     handleFocus,
@@ -89,7 +87,7 @@ const Sidebar = () => {
         {isSidebarCollapsed ? ">>" : "<<"}
       </button>
       <button
-        onClick={createNewChat}
+        onClick={handleClearChat}
         className={isSidebarCollapsed ? "hidden" : ""}
       >
         Refresh Chat
@@ -102,14 +100,14 @@ const Sidebar = () => {
       </button>
       <button
         onClick={handleStandardButtonClick}
-        className={isSidebarCollapsed ? "hidden" : ""}
-      >
+        className={`${isSidebarCollapsed ? "hidden" : ""} ${!ccInputSection ? "active-button" : ""}`}
+        >
         Standard
       </button>
       <button
         onClick={handleccButtonClick}
-        className={isSidebarCollapsed ? "hidden" : ""}
-      >
+        className={`${isSidebarCollapsed ? "hidden" : ""} ${ccInputSection ? "active-button" : ""}`}
+        >
         Conference Call
       </button>
 
@@ -227,9 +225,9 @@ const Sidebar = () => {
         <button onClick={handleClosePromptModal}>Close</button>
       </dialog>
 
-      <nav className={isSidebarCollapsed ? "hidden" : ""}>
+      <div className={isSidebarCollapsed ? "hidden" : ""}>
         <p>Beta v.1</p>
-      </nav>
+      </div>
     </section>
   );
 };

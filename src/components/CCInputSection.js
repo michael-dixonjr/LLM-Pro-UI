@@ -8,9 +8,7 @@ const CCInputSection = () => {
     message,
     setMessage,
     getMessages,
-    ccGetMessages,
     handleKeyDown,
-    ccHandleKeyDown,
     parseMessage,
     components,
     ReactMarkdown,
@@ -94,9 +92,7 @@ const CCInputSection = () => {
           style={{ height: "20px", overflowY: "auto" }}
         />
 
-        <p>
-          Token Estimate: {systemPromptCharCount}
-        </p>
+        <p>Token Estimate: {systemPromptCharCount}</p>
       </div>
       <div className="input-container">
         <label htmlFor="submit">User Prompt:</label>
@@ -104,14 +100,14 @@ const CCInputSection = () => {
           id="user-prompt"
           value={value}
           onChange={handleUserPromptChange}
-          onKeyDown={ccHandleKeyDown}
+          onKeyDown={handleKeyDown}
           onFocus={handleFocus}
           onBlur={handleBlur}
           style={{ height: "20px", overflowY: "auto" }}
           ref={userPromptRef}
         />
         <p>Token Estimate: {userPromptCharCount}</p>
-        <button id="submit" onClick={ccGetMessages}>
+        <button id="submit" onClick={() => getMessages()}>
           SEND➢
         </button>
       </div>

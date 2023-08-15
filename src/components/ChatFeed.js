@@ -74,8 +74,6 @@ const ChatFeed = () => {
 
 
     return (
-
-
         <ul className="feed" id="chatfeed">
           {chatHistory.map((chatMessage, index) => (
             <li

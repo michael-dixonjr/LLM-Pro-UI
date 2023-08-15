@@ -56,79 +56,78 @@ export const AppProvider = (props) => {
 
 
 
-  const handleStandardButtonClick = () => {
-    setccInputSection(false);
-  };
-
-  const handleccButtonClick = () => {
-    setccInputSection(true);
-  };
-
-  useEffect(() => {
-    for (const key in theme) {
-      if (theme.hasOwnProperty(key)) {
-        document.documentElement.style.setProperty(key, theme[key]);
-      }
-    }
-  }, [theme]);
 
 
 
-  const createNewChat = () => {
-    setMessage(null);
-    setValue("");
+
+
+
+  const handleClearChat = () => {
+    setChatHistory([]);
   };
 
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
   };
 
-  const getMessages = async () => {
-    setIsLoading(true);
-    setValue(""); // Reset the input value
+  function ModelButton({ model, displayName, currentModel, onClick }) {
+    return (
+      <button
+        className={`model-button ${model === currentModel ? "selected" : ""}`}
+        onClick={() => onClick(model)}
+      >
+        {displayName}
+      </button>
+    );
+  }
 
-    const options = {
-      method: "POST",
-      body: JSON.stringify({
-        message: value,
-        chatHistory: chatHistory,
-        systemPrompt: systemPrompt,
-        temperature: temperature,
-        maxTokens: remainingTokens,
-        model: model,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    try {
-      const response = await fetch(
-        "https://llm-pro-ui-server.onrender.com/completions",
-        options
-      );
-      const data = await response.json();
-      setMessage(data.choices[0].text);
-      setChatHistory([
-        ...chatHistory,
-        { role: "user", content: value },
-        { role: "system", content: data.choices[0].message.content },
-      ]);
-      setTotalTokensUsed(totalTokensUsed + data.usage.total_tokens);
-    } catch (error) {
-      console.error(error);
-    }
-    setIsLoading(false);
-  };
+const getMessages = async (systemPromptForThisCall = systemPrompt) => {
+  setIsLoading(true);
+  setValue(""); // Reset the input value
 
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter" && !event.shiftKey) {
-      // Check if the target is the user prompt textarea
-      if (event.target === userPromptRef.current) {
-        event.preventDefault(); // Prevents creating a new line when pressing Enter
-        getMessages();
-      }
-    }
+  const options = {
+    method: "POST",
+    body: JSON.stringify({
+      message: value,
+      chatHistory: chatHistory,
+      systemPrompt: systemPromptForThisCall,
+      temperature: temperature,
+      maxTokens: remainingTokens,
+      model: model,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
   };
+  try {
+    const response = await fetch(
+      "http://localhost:8000/completions",
+      options
+    );
+    const data = await response.json();
+
+    setMessage(data.choices[0].content);
+    setChatHistory([
+      ...chatHistory,
+      { role: "user", content: value },
+      { role: "system", content: data.choices[0].message.content },
+    ]);
+    setTotalTokensUsed(totalTokensUsed + data.usage.total_tokens);
+  } catch (error) {
+    console.error(error);
+  }
+  setIsLoading(false);
+};
+
+const handleKeyDown = (event) => {
+  if (event.key === "Enter" && !event.shiftKey) {
+    // Check if the target is the user prompt textarea
+    if (event.target === userPromptRef.current) {
+      event.preventDefault(); // Prevents creating a new line when pressing Enter
+      getMessages();
+    }
+  }
+};
 
   const handleFocus = (e) => {
     e.target.style.height = "inherit";
@@ -172,6 +171,8 @@ export const AppProvider = (props) => {
     },
   };
 
+  // Text-to-Speech Functionality
+
   const convertTextToSpeech = async (text) => {
     try {
       if (playingAudio) {
@@ -180,7 +181,7 @@ export const AppProvider = (props) => {
         return;
       }
 
-      const response = await fetch("https://llm-pro-ui-server.onrender.com/text-to-speech", {
+      const response = await fetch("http://localhost:8000/text-to-speech", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -249,16 +250,6 @@ export const AppProvider = (props) => {
     }
   };
 
-  function ModelButton({ model, displayName, currentModel, onClick }) {
-    return (
-      <button
-        className={`model-button ${model === currentModel ? "selected" : ""}`}
-        onClick={() => onClick(model)}
-      >
-        {displayName}
-      </button>
-    );
-  }
 
   const handleDeleteMessage = (indexToDelete) => {
     setChatHistory(chatHistory.filter((_, index) => index !== indexToDelete));
@@ -278,10 +269,24 @@ export const AppProvider = (props) => {
   }, [systemPrompt, systemPrompt1, systemPrompt2, ccInputSection]);
 
 
+
+
+  // theme and system prompt logic for changes and modals
+
+
+
   const handleThemeChange = (themeName) => {
     setTheme(themes[themeName]);
     handleCloseModal();
   };
+
+  useEffect(() => {
+    for (const key in theme) {
+      if (theme.hasOwnProperty(key)) {
+        document.documentElement.style.setProperty(key, theme[key]);
+      }
+    }
+  }, [theme]);
 
   useEffect(() => {
     const dialog = document.querySelector("dialog");
@@ -351,70 +356,43 @@ export const AppProvider = (props) => {
     };
 }, []);
 
-const ccGetMessages = async (systemPromptForThisCall = systemPrompt) => {
-    setIsLoading(true);
-    setValue(""); // Reset the input value
-
-    const options = {
-      method: "POST",
-      body: JSON.stringify({
-        message: value,
-        chatHistory: chatHistory,
-        systemPrompt: systemPromptForThisCall,
-        temperature: temperature,
-        maxTokens: remainingTokens,
-        model: model,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    try {
-      const response = await fetch(
-        "https://llm-pro-ui-server.onrender.com/completions",
-        options
-      );
-      const data = await response.json();
-
-      setMessage(data.choices[0].content);
-      setChatHistory([
-        ...chatHistory,
-        { role: "user", content: value },
-        { role: "system", content: data.choices[0].message.content }, // Update this line
-      ]);
-      setTotalTokensUsed(totalTokensUsed + data.usage.total_tokens);
 
 
-    } catch (error) {
-      console.error(error);
-    }
-    setIsLoading(false);
-  };
+// conference call settings
 
-  useEffect(() => {
-    // Only proceed if alternate version is active
-    if (ccInputSection) {
-      // Only proceed if there is at least one message in the chat history
-      if (chatHistory.length > 0) {
-        const lastMessage = chatHistory[chatHistory.length - 1];
+const handleStandardButtonClick = () => {
+  setccInputSection(false);
+};
 
-        // Only proceed if the last message is from the system and has content
-        if (lastMessage.role === "system" && lastMessage.content) {
-          const parsed = parseMessage(lastMessage.content);
+const handleccButtonClick = () => {
+  setccInputSection(true);
+};
 
-          if (parsed.to === "AI1" || !parsed.to) {
-            // Set systemPrompt1 and re-call ccGetMessages
-            setSystemPrompt(systemPrompt1);
-            ccGetMessages(systemPrompt1);
-          } else if (parsed.to === "AI2") {
-            // Set systemPrompt2 and re-call ccGetMessages
-            setSystemPrompt(systemPrompt2);
-            ccGetMessages(systemPrompt2);
-          }
+
+useEffect(() => {
+  // Only proceed if conference call is active
+  if (ccInputSection) {
+    // Only proceed if there is at least one message in the chat history
+    if (chatHistory.length > 0) {
+      const lastMessage = chatHistory[chatHistory.length - 1];
+
+      // Only proceed if the last message is from the system and has content
+      if (lastMessage.role === "system" && lastMessage.content) {
+        const parsed = parseMessage(lastMessage.content);
+
+        if (parsed.to === "AI1" || !parsed.to) {
+          // Set systemPrompt1 and re-call getMessages
+          setSystemPrompt(systemPrompt1);
+          getMessages(systemPrompt1);
+        } else if (parsed.to === "AI2") {
+          // Set systemPrompt2 and re-call getMessages
+          setSystemPrompt(systemPrompt2);
+          getMessages(systemPrompt2);
         }
       }
     }
-  }, [chatHistory]);
+  }
+}, [chatHistory]);
 
   const parseMessage = (message) => {
     console.log(message);
@@ -430,15 +408,6 @@ const ccGetMessages = async (systemPromptForThisCall = systemPrompt) => {
     return { from, to };
   };
 
-  const ccHandleKeyDown = (event) => {
-    if (event.key === "Enter" && !event.shiftKey) {
-      // Check if the target is the user prompt textarea
-      if (event.target === userPromptRef.current) {
-        event.preventDefault(); // Prevents creating a new line when pressing Enter
-        ccGetMessages(systemPrompt); // Pass in the current system prompt
-      }
-    }
-  };
 
   useEffect(() => {
     if (ccInputSection) {
@@ -451,23 +420,23 @@ const ccGetMessages = async (systemPromptForThisCall = systemPrompt) => {
   const handleSystemPrompt1Change = (e) => {
     const newSystemPrompt1 = e.target.value;
     setSystemPrompt1(newSystemPrompt1);
-  
+
     if (ccInputSection) {
       const combinedPrompt = newSystemPrompt1 + systemPrompt2;
       setSystemPromptCharCount(Math.ceil(combinedPrompt.length / 3));
     }
   };
-  
+
   const handleSystemPrompt2Change = (e) => {
     const newSystemPrompt2 = e.target.value;
     setSystemPrompt2(newSystemPrompt2);
-  
+
     if (ccInputSection) {
       const combinedPrompt = systemPrompt1 + newSystemPrompt2;
       setSystemPromptCharCount(Math.ceil(combinedPrompt.length / 3));
     }
   };
-  
+
 
   return (
     <AppContext.Provider
@@ -477,9 +446,7 @@ const ccGetMessages = async (systemPromptForThisCall = systemPrompt) => {
         message,
         setMessage,
         getMessages,
-        ccGetMessages,
         handleKeyDown,
-        ccHandleKeyDown,
         parseMessage,
         components,
         ReactMarkdown,
@@ -522,7 +489,7 @@ const ccGetMessages = async (systemPromptForThisCall = systemPrompt) => {
         mapRoleToDisplay,
         useEffect,
         ccInputSection,
-        createNewChat,
+        handleClearChat,
         handleccButtonClick,
         handleStandardButtonClick,
         handleFocus,

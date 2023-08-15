@@ -56,7 +56,7 @@ button:hover {
 
 .toggle-sidebar {
   position: fixed;
-  top: 50%;
+  top: calc(50vh - 50px);
   left: 0;
   transform: translateY(-50%);
   background-color: var(--background-color);
@@ -66,7 +66,6 @@ button:hover {
   margin: 0;
   font-size: 14px;
   cursor: pointer;
-  z-index: 10;
   transition: left 0.3s ease-in-out;
 }
 
@@ -111,6 +110,11 @@ nav {
 }
 
 .model-button.selected {
+  background-color: var(--main-color);
+  color: var(--background-color);
+}
+
+.active-button {
   background-color: var(--main-color);
   color: var(--background-color);
 }

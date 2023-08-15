@@ -21,9 +21,7 @@ const App = () => {
     message,
     setMessage,
     getMessages,
-    ccGetMessages,
     handleKeyDown,
-    ccHandleKeyDown,
     parseMessage,
     components,
     ReactMarkdown,
@@ -90,7 +88,7 @@ const App = () => {
           minWidth: isSidebarCollapsed ? "100%" : "calc(100% - 244px)",
         }}
       >
-        {<h1 className="header">LLM Pro UI</h1>}
+        {<h1>LLM Pro UI</h1>}
         <ChatFeed />
         {ccInputSection ? <CCInputSection /> : <InputSection />}
 
