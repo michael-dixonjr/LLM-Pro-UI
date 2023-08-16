@@ -80,11 +80,10 @@ const Sidebar = () => {
       style={{ width: isSidebarCollapsed ? "0" : "244px" }}
     >
       <button
-        className="toggle-sidebar"
         onClick={toggleSidebar}
-        style={{ left: isSidebarCollapsed ? "0" : "190px" }}
+        className={isSidebarCollapsed ? "hidden" : ""}
       >
-        {isSidebarCollapsed ? ">>" : "<<"}
+        Close X
       </button>
       <button
         onClick={handleClearChat}

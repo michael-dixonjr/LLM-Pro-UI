@@ -76,7 +76,7 @@ const App = () => {
     handleCloseModal,
     handleOpenPromptModal,
     handleClosePromptModal,
-    handleDeleteMessage
+    handleDeleteMessage,
   } = useContext(AppContext);
 
   return (
@@ -88,10 +88,12 @@ const App = () => {
           minWidth: isSidebarCollapsed ? "100%" : "calc(100% - 244px)",
         }}
       >
-        {<h1>LLM Pro UI</h1>}
+        <div className="header">
+          <button className="sidebar-tab" onClick={toggleSidebar}   style={{ display: isSidebarCollapsed ? 'initial' : 'none' }}>Toggle Sidebar</button>
+          <h1 className="title">LLM Pro UI</h1>
+        </div>
         <ChatFeed />
         {ccInputSection ? <CCInputSection /> : <InputSection />}
-
       </section>
     </div>
   );

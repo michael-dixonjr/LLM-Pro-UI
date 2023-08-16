@@ -17,6 +17,25 @@ body {
 }
 
 
+/* Header and title of page */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-tab {
+  position: absolute;
+  left: 0;
+  /* adjust these values as needed */
+  padding: 10px;
+  z-index: 2;
+}
+
+.page-title {
+  z-index: 1;
+}
 
 
 
