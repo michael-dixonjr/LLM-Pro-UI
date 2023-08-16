@@ -89,7 +89,7 @@ const App = () => {
         }}
       >
         <div className="header">
-          <button className="sidebar-tab" onClick={toggleSidebar}   style={{ display: isSidebarCollapsed ? 'initial' : 'none' }}>Toggle Sidebar</button>
+          <button className="sidebar-tab" onClick={toggleSidebar}   style={{ display: isSidebarCollapsed ? 'initial' : 'none' }}>Menu</button>
           <h1 className="title">LLM Pro UI</h1>
         </div>
         <ChatFeed />
