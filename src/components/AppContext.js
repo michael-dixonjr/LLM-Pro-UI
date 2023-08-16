@@ -101,7 +101,7 @@ const getMessages = async (systemPromptForThisCall = systemPrompt) => {
   };
   try {
     const response = await fetch(
-      " https://llm-pro-ui-server.onrender.com/completions",
+      "https://llm-pro-ui-server.onrender.com/completions",
       options
     );
     const data = await response.json();
@@ -181,7 +181,7 @@ const handleKeyDown = (event) => {
         return;
       }
 
-      const response = await fetch(" https://llm-pro-ui-server.onrender.com/text-to-speech", {
+      const response = await fetch("https://llm-pro-ui-server.onrender.com/text-to-speech", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
