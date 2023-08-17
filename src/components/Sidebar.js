@@ -77,7 +77,10 @@ const Sidebar = () => {
   return (
     <section
       className="side-bar"
-      style={{ width: isSidebarCollapsed ? "0" : "244px" }}
+      style={{ 
+        width: isSidebarCollapsed ? "0" : "244px",
+        borderRight: isSidebarCollapsed ? 'none' : ''
+      }}
     >
       <button
         onClick={toggleSidebar}

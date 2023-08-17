@@ -235,6 +235,7 @@ h1, h2, li, ul, ol {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding-bottom: 5px;
 }
 
 .input-container {
