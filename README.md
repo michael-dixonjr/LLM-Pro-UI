@@ -1,70 +1,53 @@
-# Getting Started with Create React App
+# LLM Pro UI
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A minimalist web-UI created with the goal of providing more granular control of LLMs (large language models) for adept users.
 
-## Available Scripts
+## ⭐️Features
 
-In the project directory, you can run:
+### Text-To-Speech
+This app uses Google Cloud's text-to-speech API in order to read out any message at the user's request by clicking the play button beside the message entry's display name.
 
-### `npm start`
+### Export to PDF
+Any conversation can be saved as a PDF for later use.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Parameter Control
+Sidebar includes settings to change how the outputs of the model are generated.
+* Temperature - This setting controls how randomness is used when the model predicts the next token. It ranges from .1 to 1.0 with .1 being the most random and 1.0 being the most deterministic.
+* Max Tokens - This setting allows control of the maximum length of the conversation and/or responses. Best to keep as high as the selected model allows for most situations.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### System Prompts
+System Prompts are short descriptions of how the AI should behave when responding. They are appended to the top of each request sent. LLM Pro UI allows you to easily change the system prompt at any point in the conversation and includes some presets for convenience.
 
-### `npm test`
+### Token Tracking
+Tokens are bits of text that are read and produced by the model. Tokens are usually around 3 characters. The LLM's of today have limits to how many tokens can be included in responses as well as limits to how many can be in the conversation as a whole before it loses a significant amount of functionality or stops working completely. The sidebar allows you to track how many tokens are being used so the user can be mindful of the limitation and plan accordingly.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Themes
+Try the different color themes!
 
-### `npm run build`
+### Conference Call Mode
+Conference Call is the most novel feature of the project. One of the goals of the LLM Pro UI tool is to allow expirimentation of ways to structure prompts and there are more modes to come in the future such as "Tree of Thought"\
+This mode will allow you to converse with two separate "entities" in the large language model by allowing the user to have two separate system prompts, simulating a three-way conversation. If one "entity" addresses the other, the conversation will continue automatically with no needed input from the user.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## ⭐️Upcoming Features
+* Dialogs that explain the parameters on hover
+* UI updates and fixes
+* Additional conversational modes
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 📖 How to Use
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🐞Bugs and Issues
+* Export to PDF only printing first page of chatfeed
+* The way some prompts are formatted will cause the response to use more tokens than the allowed maximum despite the limitation
+* Codebase needs a major refactor and tests
 
-### `npm run eject`
+## 👨‍💻Built With
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+React.js | Node.js | OpenAI API | Google Cloud TTS | Vercel | Render.com
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🪪License
+This is a personal project, and as such, there is no license applied. It's currently not open for further contributions. However, please do feel free to explore the code and use it for learning purposes!
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Please note, this project uses the OpenAI API and Google Cloud Text-to-Speech, so if you plan to use similar systems, be sure to review and adhere to their respective terms of service and usage guidelines. 
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+* [OpenAI's usage policies](https://platform.openai.com/docs/usage-policies/)
+* [Google Cloud's terms of service](https://cloud.google.com/terms)
