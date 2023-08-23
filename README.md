@@ -1,6 +1,6 @@
 # LLM Pro UI
 
-A minimalist web-UI created with the goal of providing more granular control of LLMs (large language models) for adept users.
+A minimalist web-UI created with the goal of providing more granular control of LLMs (large language models) for adept users. Try it out here ! ---> [LLM Pro UI](https://llm-pro-ui.vercel.app/)
 
 ## ⭐️Features
 
@@ -28,16 +28,29 @@ Try the different color themes!
 Conference Call is the most novel feature of the project. One of the goals of the LLM Pro UI tool is to allow expirimentation of ways to structure prompts and there are more modes to come in the future such as "Tree of Thought"\
 This mode will allow you to converse with two separate "entities" in the large language model by allowing the user to have two separate system prompts, simulating a three-way conversation. If one "entity" addresses the other, the conversation will continue automatically with no needed input from the user.
 
+![Demo](./READMEfiles/ConferenceCall.gif)
+
+
 ## ⭐️Upcoming Features
 * Dialogs that explain the parameters on hover
 * UI updates and fixes
 * Additional conversational modes
+* History for previous conversations
 
 ## 📖 How to Use
+1. Download or fork the repository.
+2. In the `server.js` backend, replace the `API_KEY` value with your OpenAI API key: `const API_KEY=paste your API key here;`
+3. In the frontend `AppContext.js` file, replace the URLs for the endpoints with localhost URLs so you can run the app locally.
+    * Replace `"https://llm-pro-ui-server.onrender.com/completions"` with `"http://localhost:8000/completions"`
+    * Replace `"https://llm-pro-ui-server.onrender.com/text-to-speech"` with `"http://localhost:8000/text-to-speech"`
+4. In the `package.json` file, right-click and run the script for the backend, then do the same for the frontend. The page should load in your default browser, then you are ready to go !
+
+![Scripts](./READMEfiles/scriptImage.png)
 
 ## 🐞Bugs and Issues
 * Export to PDF only printing first page of chatfeed
 * The way some prompts are formatted will cause the response to use more tokens than the allowed maximum despite the limitation
+* TTS not working on mobile
 * Codebase needs a major refactor and tests
 
 ## 👨‍💻Built With

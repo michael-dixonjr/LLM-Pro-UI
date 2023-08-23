@@ -77,9 +77,9 @@ const Sidebar = () => {
   return (
     <section
       className="side-bar"
-      style={{ 
+      style={{
         width: isSidebarCollapsed ? "0" : "244px",
-        borderRight: isSidebarCollapsed ? 'none' : ''
+        borderRight: isSidebarCollapsed ? "none" : "",
       }}
     >
       <button
@@ -101,15 +101,30 @@ const Sidebar = () => {
         Export to PDF
       </button>
       <button
+        onClick={() =>
+          window.open(
+            "https://github.com/michael-dixonjr/LLM-Pro-UI/blob/main/README.md",
+            "_blank"
+          )
+        }
+        className={isSidebarCollapsed ? "hidden" : ""}
+      >
+        About
+      </button>
+      <button
         onClick={handleStandardButtonClick}
-        className={`${isSidebarCollapsed ? "hidden" : ""} ${!ccInputSection ? "active-button" : ""}`}
-        >
+        className={`${isSidebarCollapsed ? "hidden" : ""} ${
+          !ccInputSection ? "active-button" : ""
+        }`}
+      >
         Standard
       </button>
       <button
         onClick={handleccButtonClick}
-        className={`${isSidebarCollapsed ? "hidden" : ""} ${ccInputSection ? "active-button" : ""}`}
-        >
+        className={`${isSidebarCollapsed ? "hidden" : ""} ${
+          ccInputSection ? "active-button" : ""
+        }`}
+      >
         Conference Call
       </button>
 
