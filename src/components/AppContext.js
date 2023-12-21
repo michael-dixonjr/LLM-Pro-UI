@@ -13,7 +13,7 @@ import { synthwave84 } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 export const AppContext = createContext();
 
-// might want to put this back to normal later
+// might want to put this back to normal later, or put in a separate component
 export const systemPrompts = [
   {
     name: "Companion/Custom",
@@ -40,17 +40,21 @@ export const AppProvider = (props) => {
     "You are a helpful AI assistant with the personality and speech mannerisms of a cute anime companion."
   );
   const [temperature, setTemperature] = useState(0.7);
-  const [model, setModel] = useState("gpt-4");
+  const [model, setModel] = useState("gpt-4-1106-preview");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [systemPromptCharCount, setSystemPromptCharCount] = useState(0);
   const [userPromptCharCount, setUserPromptCharCount] = useState(0);
-  const [baseMaxTokens, setBaseMaxTokens] = useState(8000);
+  const [baseMaxTokens, setBaseMaxTokens] = useState(128000);
   const [totalTokensUsed, setTotalTokensUsed] = useState(0);
   const [playingAudio, setPlayingAudio] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const userPromptRef = useRef();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);
+  //const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  //const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  //const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
+  //const [user, setUser] = useState("");
   const [ccInputSection, setccInputSection] = useState(false);
   const [systemPrompt1, setSystemPrompt1] = useState(
     "AI1:\n\nYou are a part of a two-AI system. You will start every message with a To : (recipient) and From : AI1 to indicate who you are and who you are addressing ( either To : AI2 or To : User ). You can only do one to and from per message you send. \n\nExample :\n\nFrom : AI1\nTo : AI2\n\nYou and AI2 are partners. It is your job to assist the user in the most helpful way possible. His job is to critique your advice and provide corrections and alternatives. Please try not to let more than 5 messages go by before addressing the user just to check in. Make sure you consult him before responding to the user for the first time.\n"
@@ -82,6 +86,8 @@ export const AppProvider = (props) => {
   const getMessages = async (systemPromptForThisCall = systemPrompt) => {
     setIsLoading(true);
 
+
+
     const options = {
       method: "POST",
       body: JSON.stringify({
@@ -89,7 +95,7 @@ export const AppProvider = (props) => {
         chatHistory: chatHistory,
         systemPrompt: systemPromptForThisCall,
         temperature: temperature,
-        maxTokens: remainingTokens,
+        maxTokens: model === 'gpt-4-1106-preview' ? 4000 : remainingTokens,
         model: model,
       }),
       headers: {
@@ -99,7 +105,7 @@ export const AppProvider = (props) => {
 
     try {
       const response = await fetch(
-        "https://llm-pro-ui-server.onrender.com/completions",
+        "http://localhost:8000/completions",
         options
       );
       if (!response.ok) {
@@ -189,7 +195,7 @@ export const AppProvider = (props) => {
         return;
       }
 
-      const response = await fetch("https://llm-pro-ui-server.onrender.com/text-to-speech", {
+      const response = await fetch("http://localhost:8000/text-to-speech", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -211,16 +217,23 @@ export const AppProvider = (props) => {
   };
 
   useEffect(() => {
-    if (model === "gpt-3.5-turbo" && baseMaxTokens > 2000) {
-      setBaseMaxTokens(2000);
+    switch(model) {
+      case "gpt-3.5-turbo":
+        setBaseMaxTokens(2000);
+        break;
+      case "gpt-3.5-turbo-16k":
+        setBaseMaxTokens(16000);
+        break;
+      case "gpt-4":
+        setBaseMaxTokens(8000);
+        break;
+      case "gpt-4-1106-preview":
+        setBaseMaxTokens(128000);
+        break;
+      default:
+        setBaseMaxTokens(2000); // default value
     }
-    if (model === "gpt-3.5-turbo-16k" && baseMaxTokens > 16000) {
-      setBaseMaxTokens(16000);
-    }
-    if (model === "gpt-4" && baseMaxTokens > 8000) {
-      setBaseMaxTokens(8000);
-    }
-  }, [model, baseMaxTokens]);
+  }, [model,]);
 
   const handleSystemPromptChange = (e) => {
     const systemPrompt = e.target.value;
@@ -240,13 +253,18 @@ export const AppProvider = (props) => {
     0
   );
 
+  /*new gpt 4 turbo has max context of 128k but can only have 4000 in the completion,
+  will have to find a way to separate completion tokens and max tokens in a way that,
+  will indicate how much remaining tokens there are totally instead of how much will,
+  go into the completion
+  */
   let remainingTokens =
     baseMaxTokens -
     systemPromptCharCount -
     userPromptCharCount -
     chatHistoryTokenCount;
 
-  // mapping function
+  // mapping function,,, may want to put this in the chatfeed component later
   const mapRoleToDisplay = (role) => {
     switch (role) {
       case "user":
@@ -317,7 +335,33 @@ export const AppProvider = (props) => {
     dialog.close();
     setIsModalOpen(false);
   };
+/*
+  // double check this code later !!!!!!!! may be unecessary
+  const handleOpenLoginModal = () => {
+    const dialog = document.querySelector("#loginDialog");
+    dialog.showModal();
+    setIsLoginModalOpen(true);
+  };
 
+  const handleCloseLoginModal = () => {
+    const dialog = document.querySelector("#loginDialog");
+    dialog.close();
+    setIsLoginModalOpen(false);
+  };
+
+  const handleOpenRegisterModal = () => {
+    const dialog = document.querySelector("#registerDialog");
+    dialog.showModal();
+    handleCloseLoginModal();
+    setIsRegisterModalOpen(true);
+  };
+
+  const handleCloseRegisterModal = () => {
+    const dialog = document.querySelector("#registerDialog");
+    dialog.close();
+    setIsRegisterModalOpen(false);
+  };
+*/
   const handleOpenPromptModal = () => {
     const dialog = document.querySelector("#promptDialog");
     dialog.showModal();
@@ -329,7 +373,19 @@ export const AppProvider = (props) => {
     dialog.close();
     setIsPromptModalOpen(false);
   };
+/*
+  const handleOpenSaveDialog = () => {
+    const dialog = document.querySelector("#saveDialog");
+    dialog.showModal();
+    setIsSaveDialogOpen(true);
+  };
 
+  const handleCloseSaveDialog = () => {
+    const dialog = document.querySelector("#saveDialog");
+    dialog.close();
+    setIsSaveDialogOpen(false);
+  };
+*/
   const handlePromptChange = (prompt) => {
     setSystemPrompt(prompt);
     handleClosePromptModal();
@@ -436,6 +492,21 @@ export const AppProvider = (props) => {
       setSystemPromptCharCount(Math.ceil(combinedPrompt.length / 3));
     }
   };
+/*
+  // functions for user accounts ------------------------------------------------------
+  async function handleLogout() {
+    try {
+      const response = await fetch('http://localhost:8000/logout', { method: 'POST', credentials: 'include' });
+      if (!response.ok) {
+        throw new Error('Logout failed');
+      }
+      setUser(null);
+    } catch (error) {
+      console.error(error);
+    }
+    handleCloseLoginModal();
+  }
+*/
 
   return (
     <AppContext.Provider
@@ -484,6 +555,14 @@ export const AppProvider = (props) => {
         setIsModalOpen,
         isPromptModalOpen,
         setIsPromptModalOpen,
+        //stuff for login and register modal
+        //isLoginModalOpen,
+        //setIsLoginModalOpen,
+        //isRegisterModalOpen,
+        //setIsRegisterModalOpen,
+        // stuff for save and retrieve convo
+        //isSaveDialogOpen,
+        //setIsSaveDialogOpen,
         ModelButton,
         mapRoleToDisplay,
         useEffect,
@@ -503,7 +582,20 @@ export const AppProvider = (props) => {
         handleCloseModal,
         handleOpenPromptModal,
         handleClosePromptModal,
+        // stuff for login and register modal
+        /* user,
+        setUser,
+        handleOpenLoginModal,
+        handleCloseLoginModal,
+        handleOpenRegisterModal,
+        handleCloseRegisterModal,
+        // stuff for save and retreive convo
+        handleOpenSaveDialog,
+        handleCloseSaveDialog,
+        convoTitle,
         handleDeleteMessage,
+        handleLogout,
+        */
       }}
     >
       {props.children}

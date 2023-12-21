@@ -3,8 +3,10 @@ import { AppContext } from "./AppContext";
 import { themes } from "./themes";
 import { useTheme } from "./themeContext";
 import { systemPrompts } from "./AppContext";
+import SaveConvo from "./SaveConvo";
 
 const Sidebar = () => {
+  // debugging artifact console.log('Rendering Sidebar');
   const {
     value,
     setValue,
@@ -92,7 +94,7 @@ const Sidebar = () => {
         onClick={handleClearChat}
         className={isSidebarCollapsed ? "hidden" : ""}
       >
-        Refresh Chat
+        Clear Chat
       </button>
       <button
         onClick={() => window.print()}
@@ -100,6 +102,19 @@ const Sidebar = () => {
       >
         Export to PDF
       </button>
+       {/*<button
+          onClick={handleOpenSaveDialog}
+          className={isSidebarCollapsed ? "hidden" : ""}
+      >
+        Save Conversation
+      </button>
+      <dialog
+          id="saveDialog"
+          open={isSaveDialogOpen}
+          onClose={handleCloseSaveDialog}
+        >
+          <SaveConvo />
+        </dialog> */}
       <button
         onClick={() =>
           window.open(
@@ -133,6 +148,12 @@ const Sidebar = () => {
         <div className="model-selection">
           <label htmlFor="model">Model:</label>
           <div>
+          <ModelButton
+              model="gpt-4-1106-preview"
+              displayName="GPT4-Turbo"
+              currentModel={model}
+              onClick={(selectedModel) => setModel(selectedModel)}
+            />
             <ModelButton
               model="gpt-4"
               displayName="GPT 4"
@@ -190,11 +211,16 @@ const Sidebar = () => {
                 ? "2000"
                 : model === "gpt-3.5-turbo-16k"
                 ? "16000"
-                : "8000"
+                : model === "gpt-4"
+                ? "8000"
+                : model === "gpt-4-1106-preview"
+                ? "128000"
+                : "4000"
             }
             step="100"
             value={baseMaxTokens}
             onChange={(e) => setBaseMaxTokens(parseInt(e.target.value))}
+            disabled={baseMaxTokens === 128000}
           />
           <input
             type="number"
@@ -204,11 +230,16 @@ const Sidebar = () => {
                 ? "2000"
                 : model === "gpt-3.5-turbo-16k"
                 ? "16000"
-                : "8000"
+                : model === "gpt-4"
+                ? "8000"
+                : model === "gpt-4-1106-preview"
+                ? "128000"
+                : "4000"
             }
             step="100"
             value={baseMaxTokens}
             onChange={(e) => setBaseMaxTokens(parseInt(e.target.value))}
+            disabled={baseMaxTokens === 128000}
           />
         </div>
 
