@@ -3,7 +3,7 @@ import { AppContext } from "./AppContext";
 import { themes } from "./themes";
 import { useTheme } from "./themeContext";
 import { systemPrompts } from "./AppContext";
-import SaveConvo from "./SaveConvo";
+//import SaveConvo from "./SaveConvo";
 
 const Sidebar = () => {
   // debugging artifact console.log('Rendering Sidebar');
