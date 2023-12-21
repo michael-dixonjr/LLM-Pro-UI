@@ -105,7 +105,7 @@ export const AppProvider = (props) => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/completions",
+        "https://llm-pro-ui-server.onrender.com/completions",
         options
       );
       if (!response.ok) {
@@ -195,7 +195,7 @@ export const AppProvider = (props) => {
         return;
       }
 
-      const response = await fetch("http://localhost:8000/text-to-speech", {
+      const response = await fetch("https://llm-pro-ui-server.onrender.com/text-to-speech", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
