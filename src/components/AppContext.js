@@ -51,10 +51,10 @@ export const AppProvider = (props) => {
   const userPromptRef = useRef();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);
-  //const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  //const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-  //const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
-  //const [user, setUser] = useState("");
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
+  const [user, setUser] = useState("");
   const [ccInputSection, setccInputSection] = useState(false);
   const [systemPrompt1, setSystemPrompt1] = useState(
     "AI1:\n\nYou are a part of a two-AI system. You will start every message with a To : (recipient) and From : AI1 to indicate who you are and who you are addressing ( either To : AI2 or To : User ). You can only do one to and from per message you send. \n\nExample :\n\nFrom : AI1\nTo : AI2\n\nYou and AI2 are partners. It is your job to assist the user in the most helpful way possible. His job is to critique your advice and provide corrections and alternatives. Please try not to let more than 5 messages go by before addressing the user just to check in. Make sure you consult him before responding to the user for the first time.\n"
@@ -325,17 +325,17 @@ export const AppProvider = (props) => {
   }, []);
 
   const handleOpenModal = () => {
-    const dialog = document.querySelector("dialog");
+    const dialog = document.querySelector("#themeDialog");
     dialog.showModal();
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    const dialog = document.querySelector("dialog");
+    const dialog = document.querySelector("#themeDialog");
     dialog.close();
     setIsModalOpen(false);
   };
-/*
+
   // double check this code later !!!!!!!! may be unecessary
   const handleOpenLoginModal = () => {
     const dialog = document.querySelector("#loginDialog");
@@ -361,7 +361,7 @@ export const AppProvider = (props) => {
     dialog.close();
     setIsRegisterModalOpen(false);
   };
-*/
+
   const handleOpenPromptModal = () => {
     const dialog = document.querySelector("#promptDialog");
     dialog.showModal();
@@ -373,11 +373,12 @@ export const AppProvider = (props) => {
     dialog.close();
     setIsPromptModalOpen(false);
   };
-/*
+
   const handleOpenSaveDialog = () => {
     const dialog = document.querySelector("#saveDialog");
     dialog.showModal();
     setIsSaveDialogOpen(true);
+    console.log("braided cucumber");
   };
 
   const handleCloseSaveDialog = () => {
@@ -385,7 +386,7 @@ export const AppProvider = (props) => {
     dialog.close();
     setIsSaveDialogOpen(false);
   };
-*/
+
   const handlePromptChange = (prompt) => {
     setSystemPrompt(prompt);
     handleClosePromptModal();
@@ -492,7 +493,7 @@ export const AppProvider = (props) => {
       setSystemPromptCharCount(Math.ceil(combinedPrompt.length / 3));
     }
   };
-/*
+
   // functions for user accounts ------------------------------------------------------
   async function handleLogout() {
     try {
@@ -506,7 +507,7 @@ export const AppProvider = (props) => {
     }
     handleCloseLoginModal();
   }
-*/
+  
 
   return (
     <AppContext.Provider
@@ -556,13 +557,13 @@ export const AppProvider = (props) => {
         isPromptModalOpen,
         setIsPromptModalOpen,
         //stuff for login and register modal
-        //isLoginModalOpen,
-        //setIsLoginModalOpen,
-        //isRegisterModalOpen,
-        //setIsRegisterModalOpen,
+        isLoginModalOpen,
+        setIsLoginModalOpen,
+        isRegisterModalOpen,
+        setIsRegisterModalOpen,
         // stuff for save and retrieve convo
-        //isSaveDialogOpen,
-        //setIsSaveDialogOpen,
+        isSaveDialogOpen,
+        setIsSaveDialogOpen,
         ModelButton,
         mapRoleToDisplay,
         useEffect,
@@ -583,7 +584,7 @@ export const AppProvider = (props) => {
         handleOpenPromptModal,
         handleClosePromptModal,
         // stuff for login and register modal
-        /* user,
+        user,
         setUser,
         handleOpenLoginModal,
         handleCloseLoginModal,
@@ -592,10 +593,9 @@ export const AppProvider = (props) => {
         // stuff for save and retreive convo
         handleOpenSaveDialog,
         handleCloseSaveDialog,
-        convoTitle,
+        //convoTitle,
         handleDeleteMessage,
         handleLogout,
-        */
       }}
     >
       {props.children}
