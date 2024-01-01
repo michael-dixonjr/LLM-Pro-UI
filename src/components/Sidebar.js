@@ -3,7 +3,7 @@ import { AppContext } from "./AppContext";
 import { themes } from "./themes";
 import { useTheme } from "./themeContext";
 import { systemPrompts } from "./AppContext";
-import SaveConvo from "./SaveConvo";
+//import SaveConvo from "./SaveConvo";
 
 const Sidebar = () => {
   // debugging artifact console.log('Rendering Sidebar');
@@ -121,7 +121,7 @@ const Sidebar = () => {
       >
         Export to PDF
       </button>
-      <button
+      {/*<button
         onClick={handleOpenSaveDialog}
         className={isSidebarCollapsed ? "hidden" : ""}
       >
@@ -133,7 +133,7 @@ const Sidebar = () => {
         onClose={handleCloseSaveDialog}
       >
         <SaveConvo />
-      </dialog>
+      </dialog>*/}
       <button
         onClick={() =>
           window.open(
