@@ -3,7 +3,7 @@ import { AppContext } from "./AppContext";
 import { themes } from "./themes";
 import { useTheme } from "./themeContext";
 import { systemPrompts } from "./AppContext";
-//import SaveConvo from "./SaveConvo";
+import SaveConvo from "./SaveConvo";
 
 const Sidebar = () => {
   // debugging artifact console.log('Rendering Sidebar');
@@ -52,6 +52,14 @@ const Sidebar = () => {
     setIsModalOpen,
     isPromptModalOpen,
     setIsPromptModalOpen,
+    //stuff for login and register modal
+    isLoginModalOpen,
+    setIsLoginModalOpen,
+    isRegisterModalOpen,
+    setIsRegisterModalOpen,
+    // stuff for save and retrieve convo
+    isSaveDialogOpen,
+    setIsSaveDialogOpen,
     ModelButton,
     mapRoleToDisplay,
     useEffect,
@@ -71,7 +79,18 @@ const Sidebar = () => {
     handleCloseModal,
     handleOpenPromptModal,
     handleClosePromptModal,
+    // stuff for login and register modal
+    user,
+    setUser,
+    handleOpenLoginModal,
+    handleCloseLoginModal,
+    handleOpenRegisterModal,
+    handleCloseRegisterModal,
+    // stuff for save and retreive convo
+    handleOpenSaveDialog,
+    handleCloseSaveDialog,
     handleDeleteMessage,
+    handleLogout,
   } = useContext(AppContext);
 
   const { theme, setTheme } = useTheme();
@@ -102,19 +121,19 @@ const Sidebar = () => {
       >
         Export to PDF
       </button>
-       {/*<button
-          onClick={handleOpenSaveDialog}
-          className={isSidebarCollapsed ? "hidden" : ""}
+      <button
+        onClick={handleOpenSaveDialog}
+        className={isSidebarCollapsed ? "hidden" : ""}
       >
         Save Conversation
       </button>
       <dialog
-          id="saveDialog"
-          open={isSaveDialogOpen}
-          onClose={handleCloseSaveDialog}
-        >
-          <SaveConvo />
-        </dialog> */}
+        id="saveDialog"
+        open={isSaveDialogOpen}
+        onClose={handleCloseSaveDialog}
+      >
+        <SaveConvo />
+      </dialog>
       <button
         onClick={() =>
           window.open(
@@ -148,7 +167,7 @@ const Sidebar = () => {
         <div className="model-selection">
           <label htmlFor="model">Model:</label>
           <div>
-          <ModelButton
+            <ModelButton
               model="gpt-4-1106-preview"
               displayName="GPT4-Turbo"
               currentModel={model}
@@ -248,7 +267,7 @@ const Sidebar = () => {
         </div>
         <button onClick={handleOpenModal}>Themes</button>
       </div>
-      <dialog open={isModalOpen} onClose={handleCloseModal}>
+      <dialog id="themeDialog" open={isModalOpen} onClose={handleCloseModal}>
         <h2>Select a theme</h2>
         {Object.keys(themes).map((themeName) => (
           <button key={themeName} onClick={() => handleThemeChange(themeName)}>
