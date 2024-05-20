@@ -126,14 +126,14 @@ const Sidebar = () => {
         className={isSidebarCollapsed ? "hidden" : ""}
       >
         Save Conversation
-    </button>*/}
+    </button>
       <dialog
         id="saveDialog"
         open={isSaveDialogOpen}
         onClose={handleCloseSaveDialog}
       >
         <SaveConvo />
-      </dialog>
+      </dialog>*/}
       <button
         onClick={() =>
           window.open(
