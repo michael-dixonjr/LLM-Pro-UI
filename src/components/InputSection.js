@@ -3,12 +3,12 @@ import { AppContext } from "./AppContext";
 
 const InputSection = () => {
   const {
-    value,
-    setValue,
+    userPrompt,
+    setUserPrompt,
     message,
     setMessage,
     getMessages,
-    handleKeyDown,
+    //handleKeyDown,
     parseMessage,
     components,
     ReactMarkdown,
@@ -55,10 +55,10 @@ const InputSection = () => {
     handleccButtonClick,
     handleStandardButtonClick,
     handleFocus,
-    handleBlur,
+    //handleBlur,
     handleThemeChange,
     handlePromptChange,
-    handleUserPromptChange,
+    //handleUserPromptChange,
     handleSystemPromptChange,
     handleSystemPrompt1Change,
     handleSystemPrompt2Change,
@@ -68,6 +68,58 @@ const InputSection = () => {
     handleClosePromptModal,
     handleDeleteMessage,
   } = useContext(AppContext);
+
+    // Step 1: Create a local state
+    const [localUserPrompt, setLocalUserPrompt] = useState("");
+    const [typingTimeout, setTypingTimeout] = useState(null);
+
+
+    // Step 2: Update the local state on every keystroke
+    const handleUserPromptChange = (e) => {
+      setLocalUserPrompt(e.target.value);
+    
+      if(typingTimeout) {
+        clearTimeout(typingTimeout);
+      }
+    
+      setTypingTimeout(setTimeout(() => {
+        setUserPromptCharCount(Math.ceil(e.target.value.length / 3));
+      }, 1000));//may have to set this way lower if it causes issues with not sending exact token amount in time to buffer models who cant go over the limit
+    };
+
+    useEffect(() => {
+      return () => {
+        clearTimeout(typingTimeout);
+      }
+    }, []);
+  
+    // Step 3: Submit the local state to the context when done
+    const handleSubmit = () => {
+      setUserPrompt(localUserPrompt);
+    };
+
+    useEffect(() => {
+      if (userPrompt !== "") {
+        getMessages();
+      }
+    }, [userPrompt]);
+
+    useEffect(() => {
+      setLocalUserPrompt("");
+    }, [chatHistory]);
+  
+    const handleKeyDown = (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        handleSubmit();
+      }
+    };
+  
+    const handleBlur = () => {
+      setUserPromptCharCount(Math.ceil(localUserPrompt.length / 3));
+      userPromptRef.current.style.height = '20px'; // Resize the textarea
+    };
+
 
   return (
     <div className="bottom-section">
@@ -91,7 +143,7 @@ const InputSection = () => {
         <label htmlFor="submit">User Prompt:</label>
         <textarea
           id="user-prompt"
-          value={value}
+          value={localUserPrompt}
           onChange={handleUserPromptChange}
           onKeyDown={handleKeyDown}
           onFocus={handleFocus}
@@ -100,7 +152,7 @@ const InputSection = () => {
           ref={userPromptRef}
         />
         <p>Token Estimate: {userPromptCharCount}</p>
-        <button id="submit" onClick={() => getMessages()}>
+        <button id="submit" onClick={() => handleSubmit()}>
           SEND➢
         </button>
       </div>

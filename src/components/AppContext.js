@@ -21,7 +21,12 @@ export const systemPrompts = [
       "You are a helpful AI assistant with the personality and speech mannerisms of a cute anime companion.",
   },
   {
-    name: "Senior Developer",
+    name: "Senior React Developer",
+    prompt:
+      "You are a senior web developer with 20 years of experience. You have in-depth knowledge of the react.js library. You enjoy helping developers solve problems by assisting in the most optimal way possible, providing explanations and examples.",
+  },
+  {
+    name: "Senior Web Developer",
     prompt:
       "You are a senior web developer with 20 years of experience. You have in-depth knowledge of the react.js library. You enjoy helping developers solve problems by assisting in the most optimal way possible, providing explanations and examples.",
   },
@@ -33,14 +38,14 @@ export const systemPrompts = [
 ];
 
 export const AppProvider = (props) => {
-  const [value, setValue] = useState("");
+  const [userPrompt, setUserPrompt] = useState("");
   const [message, setMessage] = useState(null);
   const [chatHistory, setChatHistory] = useState([]);
   const [systemPrompt, setSystemPrompt] = useState(
     "You are a helpful AI assistant with the personality and speech mannerisms of a cute anime companion."
   );
   const [temperature, setTemperature] = useState(0.7);
-  const [model, setModel] = useState("gpt-4-1106-preview");
+  const [model, setModel] = useState("gpt-4o");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [systemPromptCharCount, setSystemPromptCharCount] = useState(0);
   const [userPromptCharCount, setUserPromptCharCount] = useState(0);
@@ -86,16 +91,15 @@ export const AppProvider = (props) => {
   const getMessages = async (systemPromptForThisCall = systemPrompt) => {
     setIsLoading(true);
 
-
-
     const options = {
       method: "POST",
       body: JSON.stringify({
-        message: value,
+        message: userPrompt,
         chatHistory: chatHistory,
         systemPrompt: systemPromptForThisCall,
         temperature: temperature,
-        maxTokens: model === 'gpt-4-1106-preview' ? 4000 : remainingTokens,
+        // set max tokens to 4000 for gpt-4-1106-preview and gpt-4o models because of different architecture
+        maxTokens: model === "gpt-4-1106-preview" || "gpt-4o" ? 4000 : remainingTokens,
         model: model,
       }),
       headers: {
@@ -116,13 +120,13 @@ export const AppProvider = (props) => {
       setMessage(data.choices[0].content);
       setChatHistory([
         ...chatHistory,
-        { role: "user", content: value },
+        { role: "user", content: userPrompt },
         { role: "system", content: data.choices[0].message.content },
       ]);
       setTotalTokensUsed(totalTokensUsed + data.usage.total_tokens);
 
       //clear the input if the fetch was successful!
-      setValue("");
+      setUserPrompt("");
     } catch (error) {
       console.error(error);
       alert(
@@ -217,7 +221,7 @@ export const AppProvider = (props) => {
   };
 
   useEffect(() => {
-    switch(model) {
+    switch (model) {
       case "gpt-3.5-turbo":
         setBaseMaxTokens(2000);
         break;
@@ -230,10 +234,13 @@ export const AppProvider = (props) => {
       case "gpt-4-1106-preview":
         setBaseMaxTokens(128000);
         break;
+      case "gpt-4o":
+        setBaseMaxTokens(128000);
+        break;
       default:
         setBaseMaxTokens(2000); // default value
     }
-  }, [model,]);
+  }, [model]);
 
   const handleSystemPromptChange = (e) => {
     const systemPrompt = e.target.value;
@@ -242,9 +249,9 @@ export const AppProvider = (props) => {
   };
 
   const handleUserPromptChange = (e) => {
-    const value = e.target.value;
-    setValue(value);
-    setUserPromptCharCount(Math.ceil(value.length / 3));
+    const userPrompt = e.target.value;
+    setUserPrompt(userPrompt);
+    setUserPromptCharCount(Math.ceil(userPrompt.length / 3));
   };
 
   const estimateTokenCount = (message) => Math.ceil(message.length / 3);
@@ -281,8 +288,8 @@ export const AppProvider = (props) => {
   };
 
   useEffect(() => {
-    setUserPromptCharCount(Math.ceil(value.length / 3));
-  }, [value]);
+    setUserPromptCharCount(Math.ceil(userPrompt.length / 3));
+  }, [userPrompt]);
 
   useEffect(() => {
     if (ccInputSection) {
@@ -378,7 +385,7 @@ export const AppProvider = (props) => {
     const dialog = document.querySelector("#saveDialog");
     dialog.showModal();
     setIsSaveDialogOpen(true);
-    console.log("braided cucumber");
+    console.log("save dialog open");
   };
 
   const handleCloseSaveDialog = () => {
@@ -497,9 +504,12 @@ export const AppProvider = (props) => {
   // functions for user accounts ------------------------------------------------------
   async function handleLogout() {
     try {
-      const response = await fetch('http://localhost:8000/logout', { method: 'POST', credentials: 'include' });
+      const response = await fetch("http://localhost:8000/logout", {
+        method: "POST",
+        credentials: "include",
+      });
       if (!response.ok) {
-        throw new Error('Logout failed');
+        throw new Error("Logout failed");
       }
       setUser(null);
     } catch (error) {
@@ -507,13 +517,12 @@ export const AppProvider = (props) => {
     }
     handleCloseLoginModal();
   }
-  
 
   return (
     <AppContext.Provider
       value={{
-        value,
-        setValue,
+        userPrompt,
+        setUserPrompt,
         message,
         setMessage,
         getMessages,

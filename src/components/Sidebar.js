@@ -3,13 +3,13 @@ import { AppContext } from "./AppContext";
 import { themes } from "./themes";
 import { useTheme } from "./themeContext";
 import { systemPrompts } from "./AppContext";
-//import SaveConvo from "./SaveConvo";
+import SaveConvo from "./SaveConvo";
 
 const Sidebar = () => {
   // debugging artifact console.log('Rendering Sidebar');
   const {
-    value,
-    setValue,
+    userPrompt,
+    setUserPrompt,
     message,
     setMessage,
     getMessages,
@@ -121,19 +121,19 @@ const Sidebar = () => {
       >
         Export to PDF
       </button>
-      {/*<button
+     {/* <button
         onClick={handleOpenSaveDialog}
         className={isSidebarCollapsed ? "hidden" : ""}
       >
         Save Conversation
-      </button>
+    </button>*/}
       <dialog
         id="saveDialog"
         open={isSaveDialogOpen}
         onClose={handleCloseSaveDialog}
       >
         <SaveConvo />
-      </dialog>*/}
+      </dialog>
       <button
         onClick={() =>
           window.open(
@@ -167,6 +167,12 @@ const Sidebar = () => {
         <div className="model-selection">
           <label htmlFor="model">Model:</label>
           <div>
+          <ModelButton
+              model="gpt-4o"
+              displayName="GPT4-Omni"
+              currentModel={model}
+              onClick={(selectedModel) => setModel(selectedModel)}
+            />
             <ModelButton
               model="gpt-4-1106-preview"
               displayName="GPT4-Turbo"
